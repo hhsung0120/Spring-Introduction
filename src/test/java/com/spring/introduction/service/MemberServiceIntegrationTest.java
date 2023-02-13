@@ -1,36 +1,30 @@
 package com.spring.introduction.service;
 
 import com.spring.introduction.domain.Member;
-import com.spring.introduction.repository.MemoryMemberRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.spring.introduction.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MemberServiceTest {
+@SpringBootTest
+@Transactional //트랜잭션이 있으면 자동 rollback
+class MemberServiceIntegrationTest {
 
+    @Autowired
     MemberService memberService;
-    MemoryMemberRepository memberRepository;
-
-    @BeforeEach
-    public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
-
-    @AfterEach
-    public void afterEach() {
-        memberRepository.clearStore();
-    }
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
-    public void 회원가입() throws Exception {
+    public void 회원가입() {
         //Given
         Member member = new Member();
-        member.setName("hello");
+        member.setName("spring");
 
         //When
         Long saveId = memberService.join(member);
